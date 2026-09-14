@@ -26,7 +26,7 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
   @override
   void initState() {
     super.initState();
-    
+
     if (widget.isRootErrorBoundary) {
       // Set up global error handling for the root boundary
       FlutterError.onError = (FlutterErrorDetails details) {
@@ -66,16 +66,11 @@ class _ErrorBoundaryState extends State<ErrorBoundary> {
   @override
   Widget build(BuildContext context) {
     if (_hasError) {
-      return widget.fallback ?? _DefaultErrorWidget(
-        errorDetails: _errorDetails,
-        onReset: _reset,
-      );
+      return widget.fallback ??
+          _DefaultErrorWidget(errorDetails: _errorDetails, onReset: _reset);
     }
 
-    return ErrorCatcher(
-      onError: _handleError,
-      child: widget.child,
-    );
+    return ErrorCatcher(onError: _handleError, child: widget.child);
   }
 }
 
@@ -83,11 +78,7 @@ class ErrorCatcher extends StatelessWidget {
   final Widget child;
   final Function(FlutterErrorDetails) onError;
 
-  const ErrorCatcher({
-    super.key,
-    required this.child,
-    required this.onError,
-  });
+  const ErrorCatcher({super.key, required this.child, required this.onError});
 
   @override
   Widget build(BuildContext context) {
@@ -99,19 +90,13 @@ class _DefaultErrorWidget extends StatelessWidget {
   final FlutterErrorDetails? errorDetails;
   final VoidCallback? onReset;
 
-  const _DefaultErrorWidget({
-    this.errorDetails,
-    this.onReset,
-  });
+  const _DefaultErrorWidget({this.errorDetails, this.onReset});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: _ErrorContent(
-          errorDetails: errorDetails,
-          onReset: onReset,
-        ),
+        body: _ErrorContent(errorDetails: errorDetails, onReset: onReset),
       ),
     );
   }
@@ -121,10 +106,7 @@ class _ErrorContent extends StatelessWidget {
   final FlutterErrorDetails? errorDetails;
   final VoidCallback? onReset;
 
-  const _ErrorContent({
-    this.errorDetails,
-    this.onReset,
-  });
+  const _ErrorContent({this.errorDetails, this.onReset});
 
   @override
   Widget build(BuildContext context) {
@@ -132,16 +114,12 @@ class _ErrorContent extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(24),
-      color: theme.colorScheme.errorContainer,
+      decoration: BoxDecoration(color: theme.colorScheme.errorContainer),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.error_outline,
-              size: 64,
-              color: theme.colorScheme.error,
-            ),
+            Icon(Icons.error_outline, size: 64, color: theme.colorScheme.error),
             const SizedBox(height: 16),
             Text(
               'Something went wrong',
@@ -161,63 +139,66 @@ class _ErrorContent extends StatelessWidget {
             ),
             if (errorDetails != null) ...[
               const SizedBox(height: 16),
-              ExpansionTile(
-                title: Text(
-                  'Error Details',
-                  style: TextStyle(
-                    color: theme.colorScheme.onErrorContainer,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                iconColor: theme.colorScheme.onErrorContainer,
-                collapsedIconColor: theme.colorScheme.onErrorContainer,
-                children: [
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(16),
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.surface,
-                      borderRadius: BorderRadius.circular(8),
+              Material(
+                type: MaterialType.transparency,
+                child: ExpansionTile(
+                  title: Text(
+                    'Error Details',
+                    style: TextStyle(
+                      color: theme.colorScheme.onErrorContainer,
+                      fontWeight: FontWeight.w500,
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Exception:',
-                          style: theme.textTheme.labelMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          errorDetails!.exception.toString(),
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            fontFamily: 'monospace',
-                          ),
-                        ),
-                        if (errorDetails!.stack != null) ...[
-                          const SizedBox(height: 12),
+                  ),
+                  iconColor: theme.colorScheme.onErrorContainer,
+                  collapsedIconColor: theme.colorScheme.onErrorContainer,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(16),
+                      margin: const EdgeInsets.symmetric(horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surface,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           Text(
-                            'Stack Trace:',
+                            'Exception:',
                             style: theme.textTheme.labelMedium?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            errorDetails!.stack.toString(),
+                            errorDetails!.exception.toString(),
                             style: theme.textTheme.bodySmall?.copyWith(
                               fontFamily: 'monospace',
                             ),
-                            maxLines: 10,
-                            overflow: TextOverflow.ellipsis,
                           ),
+                          if (errorDetails!.stack != null) ...[
+                            const SizedBox(height: 12),
+                            Text(
+                              'Stack Trace:',
+                              style: theme.textTheme.labelMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              errorDetails!.stack.toString(),
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                fontFamily: 'monospace',
+                              ),
+                              maxLines: 10,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
                         ],
-                      ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
             const SizedBox(height: 24),
