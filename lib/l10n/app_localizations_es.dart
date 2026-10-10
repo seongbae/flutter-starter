@@ -154,7 +154,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get welcomeSubtitle =>
-      'Una plantilla Material 3 con autenticación,\\ntemas y navegación responsiva';
+      'Una plantilla Material 3 con autenticación, temas y navegación responsiva';
 
   @override
   String get uiComponents => 'Componentes de UI';

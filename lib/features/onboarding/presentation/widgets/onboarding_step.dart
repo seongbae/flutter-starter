@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import '../pages/onboarding_page.dart';
+import '../../../../core/theme/app_spacing.dart';
 
 class OnboardingStep extends StatelessWidget {
   final OnboardingStepData data;
@@ -27,7 +28,7 @@ class OnboardingStep extends StatelessWidget {
       ),
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(32.0),
+          padding: const EdgeInsets.all(AppSpacing.xl),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -44,14 +45,12 @@ class OnboardingStep extends StatelessWidget {
               const SizedBox(height: 48),
               Text(
                 data.title,
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+                style: Theme.of(context).textTheme.headlineLarge,
                 textAlign: TextAlign.center,
               ).animate()
                 .fadeIn(delay: 400.ms)
                 .slideY(begin: 0.2, end: 0),
-              const SizedBox(height: 24),
+              const SizedBox(height: AppSpacing.md),
               Text(
                 data.description,
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(

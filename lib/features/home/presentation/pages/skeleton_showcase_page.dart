@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../shared/widgets/skeletons/skeleton_widget.dart';
 import '../../../../shared/widgets/skeletons/page_skeletons.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/theme/app_spacing.dart';
 
 class SkeletonShowcasePage extends StatelessWidget {
   const SkeletonShowcasePage({super.key});
@@ -13,7 +14,12 @@ class SkeletonShowcasePage extends StatelessWidget {
         title: Text(AppLocalizations.of(context).loadingSkeletons),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.page,
+          AppSpacing.sm,
+          AppSpacing.page,
+          AppSpacing.xxl,
+        ),
         children: [
           _buildSection(
             context,
@@ -66,7 +72,7 @@ class SkeletonShowcasePage extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: AppSpacing.xl),
           
           _buildSection(
             context,
@@ -118,7 +124,7 @@ class SkeletonShowcasePage extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: AppSpacing.xl),
           
           _buildSection(
             context,
@@ -173,9 +179,7 @@ class SkeletonShowcasePage extends StatelessWidget {
       children: [
         Text(
           title,
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 16),
         content,

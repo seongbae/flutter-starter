@@ -20,7 +20,7 @@ class ThemeNotifier extends StateNotifier<ThemeState> {
       : super(
           ThemeState(
             themeMode: ThemeMode.values[prefs.getInt(_themeModeKey) ?? 1], // Default to light mode
-            colorSeed: ColorSeed.values[prefs.getInt(_colorSeedKey) ?? 0],
+            colorSeed: ColorSeed.values[prefs.getInt(_colorSeedKey) ?? ColorSeed.cadence.index],
           ),
         );
 

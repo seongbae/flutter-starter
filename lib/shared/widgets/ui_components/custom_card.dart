@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import '../../../core/theme/app_spacing.dart';
 
 enum CardVariant { elevated, filled, outlined }
 
@@ -40,7 +41,7 @@ class CustomCard extends StatelessWidget {
     if (onTap != null) {
       card = InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
         child: card,
       );
     }
@@ -62,11 +63,12 @@ class CustomCard extends StatelessWidget {
   BoxDecoration _getDecoration(ThemeData theme) {
     return switch (variant) {
       CardVariant.elevated => BoxDecoration(
-          color: color ?? theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(12),
+          color: color ?? theme.cardColor,
+          borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+          border: Border.all(color: theme.dividerColor),
           boxShadow: [
             BoxShadow(
-              color: theme.colorScheme.shadow.withValues(alpha: 0.1),
+              color: theme.colorScheme.shadow.withValues(alpha: 0.06),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -74,15 +76,12 @@ class CustomCard extends StatelessWidget {
         ),
       CardVariant.filled => BoxDecoration(
           color: color ?? theme.colorScheme.surfaceContainerHighest,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
         ),
       CardVariant.outlined => BoxDecoration(
           color: color ?? theme.colorScheme.surface,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: theme.colorScheme.outline,
-            width: 1,
-          ),
+          borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+          border: Border.all(color: theme.dividerColor),
         ),
     };
   }

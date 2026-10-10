@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../shared/widgets/ui_components/ui_components.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/theme/app_spacing.dart';
 
 class UIShowcasePage extends ConsumerStatefulWidget {
   const UIShowcasePage({super.key});
@@ -14,7 +15,7 @@ class _UIShowcasePageState extends ConsumerState<UIShowcasePage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _chipSelected = false;
-  
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -29,7 +30,12 @@ class _UIShowcasePageState extends ConsumerState<UIShowcasePage> {
         title: Text(AppLocalizations.of(context).uiComponentsShowcase),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.page,
+          AppSpacing.sm,
+          AppSpacing.page,
+          AppSpacing.xxl,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -123,7 +129,7 @@ class _UIShowcasePageState extends ConsumerState<UIShowcasePage> {
               ),
             ),
             const Divider(height: 48),
-            
+
             _buildSection(
               AppLocalizations.of(context).cards,
               Wrap(
@@ -132,26 +138,34 @@ class _UIShowcasePageState extends ConsumerState<UIShowcasePage> {
                 children: [
                   CustomCard(
                     variant: CardVariant.elevated,
-                    child: _buildCardContent(AppLocalizations.of(context).elevatedCard),
+                    child: _buildCardContent(
+                      AppLocalizations.of(context).elevatedCard,
+                    ),
                   ),
                   CustomCard(
                     variant: CardVariant.filled,
-                    child: _buildCardContent(AppLocalizations.of(context).filledCard),
+                    child: _buildCardContent(
+                      AppLocalizations.of(context).filledCard,
+                    ),
                   ),
                   CustomCard(
                     variant: CardVariant.outlined,
-                    child: _buildCardContent(AppLocalizations.of(context).outlinedCard),
+                    child: _buildCardContent(
+                      AppLocalizations.of(context).outlinedCard,
+                    ),
                   ),
                   CustomCard(
                     variant: CardVariant.elevated,
                     onTap: () {},
-                    child: _buildCardContent(AppLocalizations.of(context).clickableCard),
+                    child: _buildCardContent(
+                      AppLocalizations.of(context).clickableCard,
+                    ),
                   ),
                 ],
               ),
             ),
             const Divider(height: 48),
-            
+
             _buildSection(
               AppLocalizations.of(context).textFields,
               Column(
@@ -168,13 +182,9 @@ class _UIShowcasePageState extends ConsumerState<UIShowcasePage> {
                     prefixIcon: const Icon(Icons.search),
                   ),
                   const SizedBox(height: 16),
-                  EmailTextField(
-                    controller: _emailController,
-                  ),
+                  EmailTextField(controller: _emailController),
                   const SizedBox(height: 16),
-                  PasswordTextField(
-                    controller: _passwordController,
-                  ),
+                  PasswordTextField(controller: _passwordController),
                   const SizedBox(height: 16),
                   CustomTextField(
                     label: AppLocalizations.of(context).multilineTextField,
@@ -190,7 +200,7 @@ class _UIShowcasePageState extends ConsumerState<UIShowcasePage> {
               ),
             ),
             const Divider(height: 48),
-            
+
             _buildSection(
               AppLocalizations.of(context).chips,
               Column(
@@ -269,15 +279,17 @@ class _UIShowcasePageState extends ConsumerState<UIShowcasePage> {
               ),
             ),
             const Divider(height: 48),
-            
+
             _buildSection(
               AppLocalizations.of(context).avatars,
               Column(
                 children: [
                   _buildSubsection(
                     AppLocalizations.of(context).sizes,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    Wrap(
+                      alignment: WrapAlignment.spaceEvenly,
+                      spacing: 16,
+                      runSpacing: 16,
                       children: [
                         const CustomAvatar(
                           name: 'John Doe',
@@ -301,18 +313,17 @@ class _UIShowcasePageState extends ConsumerState<UIShowcasePage> {
                   const SizedBox(height: 24),
                   _buildSubsection(
                     AppLocalizations.of(context).types,
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    Wrap(
+                      alignment: WrapAlignment.spaceEvenly,
+                      spacing: 16,
+                      runSpacing: 16,
                       children: [
                         const CustomAvatar(
-                          imageUrl: 'https://ui-avatars.com/api/?name=Showcase+User&background=random&color=fff&size=150&format=png',
+                          imageUrl:
+                              'https://ui-avatars.com/api/?name=Showcase+User&background=random&color=fff&size=150&format=png',
                         ),
-                        const CustomAvatar(
-                          name: 'John Doe',
-                        ),
-                        const CustomAvatar(
-                          icon: Icons.person,
-                        ),
+                        const CustomAvatar(name: 'John Doe'),
+                        const CustomAvatar(icon: Icons.person),
                         CustomAvatar(
                           name: 'Jane',
                           badge: Container(
@@ -334,7 +345,8 @@ class _UIShowcasePageState extends ConsumerState<UIShowcasePage> {
                       avatars: List.generate(
                         8,
                         (index) => CustomAvatar(
-                          imageUrl: 'https://ui-avatars.com/api/?name=User+${index + 1}&background=random&color=fff&size=150&format=png',
+                          imageUrl:
+                              'https://ui-avatars.com/api/?name=User+${index + 1}&background=random&color=fff&size=150&format=png',
                         ),
                       ),
                     ),
@@ -347,23 +359,21 @@ class _UIShowcasePageState extends ConsumerState<UIShowcasePage> {
       ),
     );
   }
-  
+
   Widget _buildSection(String title, Widget child) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           title,
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 16),
         child,
       ],
     );
   }
-  
+
   Widget _buildSubsection(String title, Widget child) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -379,15 +389,12 @@ class _UIShowcasePageState extends ConsumerState<UIShowcasePage> {
       ],
     );
   }
-  
+
   Widget _buildCardContent(String title) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
+        Text(title, style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 8),
         Text(
           AppLocalizations.of(context).sampleCardContent,

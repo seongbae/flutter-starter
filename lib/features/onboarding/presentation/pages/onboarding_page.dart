@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/onboarding_step.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/theme/app_spacing.dart';
 
 
 class OnboardingPage extends ConsumerStatefulWidget {
@@ -120,7 +121,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
                 const SizedBox(height: 32),
                 // Navigation buttons
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

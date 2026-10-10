@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../../../core/theme/app_spacing.dart';
 
 enum TextFieldVariant { outlined, filled }
 
@@ -101,35 +102,35 @@ class _CustomTextFieldState extends State<CustomTextField> {
           ? theme.colorScheme.surfaceContainerHighest
           : null,
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
         borderSide: widget.variant == TextFieldVariant.filled
             ? BorderSide.none
-            : const BorderSide(),
+            : BorderSide(color: theme.dividerColor),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
         borderSide: widget.variant == TextFieldVariant.filled
             ? BorderSide.none
-            : BorderSide(color: theme.colorScheme.outline),
+            : BorderSide(color: theme.dividerColor),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
         borderSide: BorderSide(
           color: theme.colorScheme.primary,
-          width: 2,
+          width: 1.5,
         ),
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
         borderSide: BorderSide(
           color: theme.colorScheme.error,
         ),
       ),
       focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
         borderSide: BorderSide(
           color: theme.colorScheme.error,
-          width: 2,
+          width: 1.5,
         ),
       ),
     );
@@ -137,7 +138,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
         boxShadow: _isFocused && widget.variant == TextFieldVariant.outlined
             ? [
                 BoxShadow(

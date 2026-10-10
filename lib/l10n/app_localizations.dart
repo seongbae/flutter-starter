@@ -391,7 +391,7 @@ abstract class AppLocalizations {
   /// Welcome subtitle describing the app
   ///
   /// In en, this message translates to:
-  /// **'A Material 3 starter template with authentication,\\ntheming, and responsive navigation'**
+  /// **'A Material 3 starter template with authentication, theming, and responsive navigation'**
   String get welcomeSubtitle;
 
   /// UI Components showcase button

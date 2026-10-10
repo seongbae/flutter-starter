@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
+import '../../../core/theme/app_spacing.dart';
 
 enum FileUploadType {
   image,
@@ -84,7 +85,7 @@ class _FileUploadWidgetState extends State<FileUploadWidget> {
                   width: _isDragOver ? 2 : 1,
                   style: BorderStyle.solid,
                 ),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
                 color: _isDragOver 
                     ? theme.colorScheme.primary.withValues(alpha: 0.05)
                     : theme.colorScheme.surfaceContainerLowest,
@@ -147,7 +148,7 @@ class _FileUploadWidgetState extends State<FileUploadWidget> {
     final theme = Theme.of(context);
     
     return Card(
-      margin: const EdgeInsets.only(bottom: 8),
+      margin: const EdgeInsets.only(bottom: AppSpacing.sm),
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Row(

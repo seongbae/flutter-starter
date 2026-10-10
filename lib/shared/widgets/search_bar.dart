@@ -51,7 +51,7 @@ class _AppSearchBarState extends State<AppSearchBar> {
       onChanged: widget.onChanged,
       decoration: InputDecoration(
         hintText: widget.hintText,
-        prefixIcon: const Icon(Icons.search),
+        prefixIcon: const Icon(Icons.search_rounded, size: 20),
         suffixIcon: _showClear
             ? IconButton(
                 icon: const Icon(Icons.clear),
@@ -62,10 +62,11 @@ class _AppSearchBarState extends State<AppSearchBar> {
                 },
               )
             : null,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(28),
+        // Matches the 48px height of the buttons it usually sits beside.
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
         ),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
       ),
     );
   }

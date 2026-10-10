@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../core/models/user.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/theme/app_spacing.dart';
 
 class UserDataTable extends StatelessWidget {
   final List<User> users;
   final Function(User) onUserTap;
   final Function(User)? onDeleteUser;
   final bool showActions;
-  
+
   const UserDataTable({
     super.key,
     required this.users,
@@ -20,24 +21,29 @@ class UserDataTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final dateFormat = DateFormat.yMMMd();
-    
+
     return LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.maxWidth < 600) {
           // Mobile view - Cards
           return ListView.builder(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.page,
+              0,
+              AppSpacing.page,
+              AppSpacing.xxl,
+            ),
             itemCount: users.length,
             itemBuilder: (context, index) {
               final user = users[index];
               return Card(
-                margin: const EdgeInsets.only(bottom: 8),
+                margin: const EdgeInsets.only(bottom: AppSpacing.md),
                 child: ListTile(
                   leading: CircleAvatar(
-                    backgroundImage: user.avatarUrl != null 
+                    backgroundImage: user.avatarUrl != null
                         ? NetworkImage(user.avatarUrl!)
                         : null,
-                    child: user.avatarUrl == null 
+                    child: user.avatarUrl == null
                         ? Text(user.name.substring(0, 1).toUpperCase())
                         : null,
                   ),
@@ -47,30 +53,40 @@ class UserDataTable extends StatelessWidget {
                     children: [
                       Text(user.email),
                       const SizedBox(height: 4),
-                      Row(
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 4,
+                        crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           Chip(
                             label: Text(user.role),
                             visualDensity: VisualDensity.compact,
                           ),
-                          const SizedBox(width: 8),
                           if (user.isActive)
-                            const Icon(Icons.check_circle, 
-                                     color: Colors.green, size: 16)
+                            const Icon(
+                              Icons.check_circle,
+                              color: Colors.green,
+                              size: 16,
+                            )
                           else
-                            const Icon(Icons.cancel, 
-                                     color: Colors.red, size: 16),
+                            const Icon(
+                              Icons.cancel,
+                              color: Colors.red,
+                              size: 16,
+                            ),
                         ],
                       ),
                     ],
                   ),
-                  trailing: showActions ? IconButton(
-                    icon: const Icon(Icons.more_vert),
-                    onPressed: () => _showUserOptions(context, user),
-                  ) : GestureDetector(
-                    onTap: () => onUserTap(user),
-                    child: const Icon(Icons.chevron_right),
-                  ),
+                  trailing: showActions
+                      ? IconButton(
+                          icon: const Icon(Icons.more_vert),
+                          onPressed: () => _showUserOptions(context, user),
+                        )
+                      : GestureDetector(
+                          onTap: () => onUserTap(user),
+                          child: const Icon(Icons.chevron_right),
+                        ),
                   onTap: () => onUserTap(user),
                 ),
               );
@@ -86,10 +102,15 @@ class UserDataTable extends StatelessWidget {
                   DataColumn(label: Text(AppLocalizations.of(context).name)),
                   DataColumn(label: Text(AppLocalizations.of(context).email)),
                   DataColumn(label: Text(AppLocalizations.of(context).role)),
-                  DataColumn(label: Text(AppLocalizations.of(context).department)),
+                  DataColumn(
+                    label: Text(AppLocalizations.of(context).department),
+                  ),
                   DataColumn(label: Text(AppLocalizations.of(context).status)),
                   DataColumn(label: Text(AppLocalizations.of(context).created)),
-                  if (showActions) DataColumn(label: Text(AppLocalizations.of(context).actions)),
+                  if (showActions)
+                    DataColumn(
+                      label: Text(AppLocalizations.of(context).actions),
+                    ),
                 ],
                 rows: users.map((user) {
                   return DataRow(
@@ -99,11 +120,13 @@ class UserDataTable extends StatelessWidget {
                           children: [
                             CircleAvatar(
                               radius: 16,
-                              backgroundImage: user.avatarUrl != null 
+                              backgroundImage: user.avatarUrl != null
                                   ? NetworkImage(user.avatarUrl!)
                                   : null,
-                              child: user.avatarUrl == null 
-                                  ? Text(user.name.substring(0, 1).toUpperCase())
+                              child: user.avatarUrl == null
+                                  ? Text(
+                                      user.name.substring(0, 1).toUpperCase(),
+                                    )
                                   : null,
                             ),
                             const SizedBox(width: 8),
@@ -129,28 +152,33 @@ class UserDataTable extends StatelessWidget {
                               size: 16,
                             ),
                             const SizedBox(width: 4),
-                            Text(user.isActive ? AppLocalizations.of(context).active : AppLocalizations.of(context).inactive),
+                            Text(
+                              user.isActive
+                                  ? AppLocalizations.of(context).active
+                                  : AppLocalizations.of(context).inactive,
+                            ),
                           ],
                         ),
                       ),
                       DataCell(Text(dateFormat.format(user.createdAt))),
-                      if (showActions) DataCell(
-                        Row(
-                          children: [
-                            IconButton(
-                              icon: const Icon(Icons.edit_outlined),
-                              onPressed: () => onUserTap(user),
-                              tooltip: AppLocalizations.of(context).edit,
-                            ),
-                            if (onDeleteUser != null)
+                      if (showActions)
+                        DataCell(
+                          Row(
+                            children: [
                               IconButton(
-                                icon: const Icon(Icons.delete_outline),
-                                onPressed: () => onDeleteUser!(user),
-                                tooltip: AppLocalizations.of(context).delete,
+                                icon: const Icon(Icons.edit_outlined),
+                                onPressed: () => onUserTap(user),
+                                tooltip: AppLocalizations.of(context).edit,
                               ),
-                          ],
+                              if (onDeleteUser != null)
+                                IconButton(
+                                  icon: const Icon(Icons.delete_outline),
+                                  onPressed: () => onDeleteUser!(user),
+                                  tooltip: AppLocalizations.of(context).delete,
+                                ),
+                            ],
+                          ),
                         ),
-                      ),
                     ],
                   );
                 }).toList(),
@@ -161,7 +189,7 @@ class UserDataTable extends StatelessWidget {
       },
     );
   }
-  
+
   void _showUserOptions(BuildContext context, User user) {
     showModalBottomSheet(
       context: context,
@@ -189,7 +217,8 @@ class UserDataTable extends StatelessWidget {
               if (onDeleteUser != null)
                 ListTile(
                   leading: const Icon(Icons.delete_outline, color: Colors.red),
-                  title: Text(AppLocalizations.of(context).deleteUser, 
+                  title: Text(
+                    AppLocalizations.of(context).deleteUser,
                     style: const TextStyle(color: Colors.red),
                   ),
                   onTap: () {

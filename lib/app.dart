@@ -22,18 +22,8 @@ class App extends ConsumerWidget {
       child: MaterialApp.router(
         title: 'Flutter Starter', // Note: This should use context but MaterialApp doesn't support dynamic title easily
         debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme(
-          ColorScheme.fromSeed(
-            seedColor: themeState.colorSeed.color,
-            brightness: Brightness.light,
-          ),
-        ),
-        darkTheme: AppTheme.darkTheme(
-          ColorScheme.fromSeed(
-            seedColor: themeState.colorSeed.color,
-            brightness: Brightness.dark,
-          ),
-        ),
+        theme: AppTheme.light(themeState.colorSeed),
+        darkTheme: AppTheme.dark(themeState.colorSeed),
         themeMode: themeState.themeMode,
         locale: locale,
         localizationsDelegates: const [

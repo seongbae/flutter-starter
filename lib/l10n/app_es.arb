@@ -48,7 +48,7 @@
   "uploadSuccess": "¡Subida exitosa!",
   "uploadError": "Error en la subida",
   "welcomeTitle": "Bienvenido a Flutter Starter",
-  "welcomeSubtitle": "Una plantilla Material 3 con autenticación,\\ntemas y navegación responsiva",
+  "welcomeSubtitle": "Una plantilla Material 3 con autenticación, temas y navegación responsiva",
   "uiComponents": "Componentes de UI",
   "loadingSkeletons": "Esqueletos de Carga",
   "errorHandling": "Manejo de Errores",

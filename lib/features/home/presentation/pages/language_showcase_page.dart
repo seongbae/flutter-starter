@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../l10n/app_localizations.dart';
 import '../../../../core/providers/locale_provider.dart';
+import '../../../../core/theme/app_spacing.dart';
 
 class LanguageShowcasePage extends ConsumerWidget {
   const LanguageShowcasePage({super.key});
@@ -16,7 +17,12 @@ class LanguageShowcasePage extends ConsumerWidget {
         title: Text(l10n.language),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.page,
+          AppSpacing.sm,
+          AppSpacing.page,
+          AppSpacing.xxl,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -33,7 +39,7 @@ class LanguageShowcasePage extends ConsumerWidget {
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: AppSpacing.xl),
             
             // Language Selection
             ...SupportedLocales.locales.map((locale) {
@@ -92,7 +98,7 @@ class LanguageShowcasePage extends ConsumerWidget {
               );
             }),
             
-            const SizedBox(height: 32),
+            const SizedBox(height: AppSpacing.xl),
             
             // Sample Text in Different Languages
             Card(
@@ -103,9 +109,7 @@ class LanguageShowcasePage extends ConsumerWidget {
                   children: [
                     Text(
                       'Sample Text Preview',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 16),
                     _buildSampleText(context, l10n),
@@ -114,7 +118,7 @@ class LanguageShowcasePage extends ConsumerWidget {
               ),
             ),
             
-            const SizedBox(height: 32),
+            const SizedBox(height: AppSpacing.xl),
             
             // Language Statistics
             Card(
@@ -125,9 +129,7 @@ class LanguageShowcasePage extends ConsumerWidget {
                   children: [
                     Text(
                       'Localization Info',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: 16),
                     _buildInfoRow(

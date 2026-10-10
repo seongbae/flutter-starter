@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../shared/widgets/ui_components/ui_components.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/theme/app_spacing.dart';
 
 class FormsExamplePage extends ConsumerStatefulWidget {
   const FormsExamplePage({super.key});
@@ -68,7 +69,12 @@ class _FormsExamplePageState extends ConsumerState<FormsExamplePage> {
         title: Text(AppLocalizations.of(context).formsExample),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.page,
+          AppSpacing.sm,
+          AppSpacing.page,
+          AppSpacing.xxl,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -77,13 +83,13 @@ class _FormsExamplePageState extends ConsumerState<FormsExamplePage> {
               AppLocalizations.of(context).completeFormDescription,
               _buildUserRegistrationForm(),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: AppSpacing.xl),
             _buildFormSection(
               AppLocalizations.of(context).paymentForm,
               AppLocalizations.of(context).creditCardFormDescription,
               _buildPaymentForm(),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: AppSpacing.xl),
             _buildFormSection(
               AppLocalizations.of(context).feedbackForm,
               AppLocalizations.of(context).ratingFormDescription,

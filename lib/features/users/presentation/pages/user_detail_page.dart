@@ -4,19 +4,17 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../providers/users_provider.dart';
 import '../widgets/edit_user_form.dart';
+import '../../../../core/theme/app_spacing.dart';
 
 class UserDetailPage extends ConsumerWidget {
   final String userId;
-  
-  const UserDetailPage({
-    super.key,
-    required this.userId,
-  });
+
+  const UserDetailPage({super.key, required this.userId});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userAsync = ref.watch(selectedUserProvider(userId));
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('User Details'),
@@ -46,9 +44,14 @@ class UserDetailPage extends ConsumerWidget {
               ),
             );
           }
-          
+
           return SingleChildScrollView(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.page,
+              AppSpacing.sm,
+              AppSpacing.page,
+              AppSpacing.xxl,
+            ),
             child: Center(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 800),
@@ -56,11 +59,11 @@ class UserDetailPage extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     _UserHeader(user: user),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: AppSpacing.md),
                     _UserDetailsCard(user: user),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: AppSpacing.md),
                     _UserActivityCard(user: user),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: AppSpacing.xl),
                     _UserActions(user: user),
                   ],
                 ),
@@ -91,22 +94,23 @@ class UserDetailPage extends ConsumerWidget {
 
 class _UserHeader extends StatelessWidget {
   final dynamic user;
-  
+
   const _UserHeader({required this.user});
 
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.zero,
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: Row(
           children: [
             CircleAvatar(
               radius: 48,
-              backgroundImage: user.avatarUrl != null 
+              backgroundImage: user.avatarUrl != null
                   ? NetworkImage(user.avatarUrl!)
                   : null,
-              child: user.avatarUrl == null 
+              child: user.avatarUrl == null
                   ? Text(
                       user.name.substring(0, 1).toUpperCase(),
                       style: Theme.of(context).textTheme.headlineMedium,
@@ -134,7 +138,9 @@ class _UserHeader extends StatelessWidget {
                     children: [
                       Chip(
                         label: Text(user.role),
-                        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                        backgroundColor: Theme.of(
+                          context,
+                        ).colorScheme.primaryContainer,
                       ),
                       const SizedBox(width: 8),
                       Chip(
@@ -144,7 +150,7 @@ class _UserHeader extends StatelessWidget {
                           size: 16,
                         ),
                         label: Text(user.isActive ? 'Active' : 'Inactive'),
-                        backgroundColor: user.isActive 
+                        backgroundColor: user.isActive
                             ? Colors.green.withValues(alpha: 0.1)
                             : Colors.red.withValues(alpha: 0.1),
                       ),
@@ -162,24 +168,23 @@ class _UserHeader extends StatelessWidget {
 
 class _UserDetailsCard extends StatelessWidget {
   final dynamic user;
-  
+
   const _UserDetailsCard({required this.user});
 
   @override
   Widget build(BuildContext context) {
     final dateFormat = DateFormat.yMMMd();
-    
+
     return Card(
+      margin: EdgeInsets.zero,
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Contact Information',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 16),
             _DetailRow(
@@ -206,9 +211,7 @@ class _UserDetailsCard extends StatelessWidget {
             const Divider(height: 32),
             Text(
               'Account Information',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 16),
             _DetailRow(
@@ -231,32 +234,32 @@ class _UserDetailsCard extends StatelessWidget {
 
 class _UserActivityCard extends StatelessWidget {
   final dynamic user;
-  
+
   const _UserActivityCard({required this.user});
 
   @override
   Widget build(BuildContext context) {
     final timeFormat = DateFormat.jm();
     final dateFormat = DateFormat.yMMMd();
-    
+
     return Card(
+      margin: EdgeInsets.zero,
       child: Padding(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(AppSpacing.lg),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Activity',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 16),
             if (user.lastLogin != null)
               _DetailRow(
                 icon: Icons.login,
                 label: 'Last Login',
-                value: '${dateFormat.format(user.lastLogin!)} at ${timeFormat.format(user.lastLogin!)}',
+                value:
+                    '${dateFormat.format(user.lastLogin!)} at ${timeFormat.format(user.lastLogin!)}',
               )
             else
               Row(
@@ -283,45 +286,49 @@ class _UserActivityCard extends StatelessWidget {
 
 class _UserActions extends ConsumerWidget {
   final dynamic user;
-  
+
   const _UserActions({required this.user});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
+    return Wrap(
+      alignment: WrapAlignment.end,
+      spacing: 16,
+      runSpacing: 8,
       children: [
         OutlinedButton.icon(
           onPressed: () async {
-            final confirmed = await showDialog<bool>(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: const Text('Delete User'),
-                content: Text('Are you sure you want to delete ${user.name}?'),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(false),
-                    child: const Text('Cancel'),
-                  ),
-                  FilledButton(
-                    onPressed: () => Navigator.of(context).pop(true),
-                    style: FilledButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.error,
+            final confirmed =
+                await showDialog<bool>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Delete User'),
+                    content: Text(
+                      'Are you sure you want to delete ${user.name}?',
                     ),
-                    child: const Text('Delete'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        child: const Text('Cancel'),
+                      ),
+                      FilledButton(
+                        onPressed: () => Navigator.of(context).pop(true),
+                        style: FilledButton.styleFrom(
+                          backgroundColor: Theme.of(context).colorScheme.error,
+                        ),
+                        child: const Text('Delete'),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ) ?? false;
-            
+                ) ??
+                false;
+
             if (confirmed) {
               await ref.read(usersProvider.notifier).deleteUser(user.id);
               if (context.mounted) {
                 context.go('/users');
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('User ${user.name} deleted'),
-                  ),
+                  SnackBar(content: Text('User ${user.name} deleted')),
                 );
               }
             }
@@ -332,7 +339,6 @@ class _UserActions extends ConsumerWidget {
             foregroundColor: Theme.of(context).colorScheme.error,
           ),
         ),
-        const SizedBox(width: 16),
         FilledButton.icon(
           onPressed: () => _showEditDialog(context, ref, user),
           icon: const Icon(Icons.edit),
@@ -341,7 +347,7 @@ class _UserActions extends ConsumerWidget {
       ],
     );
   }
-  
+
   void _showEditDialog(BuildContext context, WidgetRef ref, dynamic user) {
     showDialog(
       context: context,
@@ -354,7 +360,7 @@ class _DetailRow extends StatelessWidget {
   final IconData icon;
   final String label;
   final String value;
-  
+
   const _DetailRow({
     required this.icon,
     required this.label,
@@ -382,10 +388,7 @@ class _DetailRow extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 2),
-              Text(
-                value,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+              Text(value, style: Theme.of(context).textTheme.bodyMedium),
             ],
           ),
         ),

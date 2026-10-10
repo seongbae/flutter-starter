@@ -9,7 +9,9 @@ enum ColorSeed {
   yellow('Yellow', Colors.yellow),
   orange('Orange', Colors.orange),
   deepOrange('Deep Orange', Colors.deepOrange),
-  pink('Pink', Colors.pink);
+  pink('Pink', Colors.pink),
+  // Appended (not first) so indices already saved in prefs keep their meaning.
+  cadence('Cadence', Color(0xFFA5CE53));
 
   const ColorSeed(this.label, this.color);
   final String label;

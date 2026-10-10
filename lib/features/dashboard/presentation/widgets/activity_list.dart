@@ -15,6 +15,7 @@ class ActivityList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      margin: EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -22,9 +23,7 @@ class ActivityList extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Text(
               AppLocalizations.of(context).recentActivity,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
           ),
           const Divider(height: 1),

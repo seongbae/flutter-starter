@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../../shared/widgets/file_upload/file_upload_widget.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/theme/app_spacing.dart';
 
 class FileUploadShowcasePage extends StatefulWidget {
   const FileUploadShowcasePage({super.key});
@@ -22,7 +23,12 @@ class _FileUploadShowcasePageState extends State<FileUploadShowcasePage> {
         title: Text(AppLocalizations.of(context).fileUpload),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.page,
+          AppSpacing.sm,
+          AppSpacing.page,
+          AppSpacing.xxl,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -44,7 +50,7 @@ class _FileUploadShowcasePageState extends State<FileUploadShowcasePage> {
                 onError: (error) => _showErrorMessage(error),
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: AppSpacing.xl),
             
             _buildSection(
               context,
@@ -61,7 +67,7 @@ class _FileUploadShowcasePageState extends State<FileUploadShowcasePage> {
                 onError: (error) => _showErrorMessage(error),
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: AppSpacing.xl),
             
             _buildSection(
               context,
@@ -78,7 +84,7 @@ class _FileUploadShowcasePageState extends State<FileUploadShowcasePage> {
                 onError: (error) => _showErrorMessage(error),
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: AppSpacing.xl),
             
             _buildSection(
               context,
@@ -99,7 +105,7 @@ class _FileUploadShowcasePageState extends State<FileUploadShowcasePage> {
                 onError: (error) => _showErrorMessage(error),
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: AppSpacing.xl),
             
             _buildSection(
               context,
@@ -115,7 +121,7 @@ class _FileUploadShowcasePageState extends State<FileUploadShowcasePage> {
                 onError: (error) => _showErrorMessage(error),
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: AppSpacing.xl),
             
             _buildSection(
               context,
@@ -131,7 +137,7 @@ class _FileUploadShowcasePageState extends State<FileUploadShowcasePage> {
                 onError: (error) => _showErrorMessage(error),
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: AppSpacing.xl),
             
             // Upload Statistics
             _buildUploadStats(),
@@ -190,9 +196,7 @@ class _FileUploadShowcasePageState extends State<FileUploadShowcasePage> {
           children: [
             Text(
               AppLocalizations.of(context).uploadStatistics,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 16),
             Row(
@@ -280,9 +284,7 @@ class _FileUploadShowcasePageState extends State<FileUploadShowcasePage> {
           const SizedBox(height: 8),
           Text(
             value,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+            style: Theme.of(context).textTheme.titleLarge,
           ),
           Text(
             label,

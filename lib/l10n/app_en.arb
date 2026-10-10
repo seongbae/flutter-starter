@@ -240,7 +240,7 @@
     "description": "Welcome title on home page"
   },
   
-  "welcomeSubtitle": "A Material 3 starter template with authentication,\\ntheming, and responsive navigation",
+  "welcomeSubtitle": "A Material 3 starter template with authentication, theming, and responsive navigation",
   "@welcomeSubtitle": {
     "description": "Welcome subtitle describing the app"
   },

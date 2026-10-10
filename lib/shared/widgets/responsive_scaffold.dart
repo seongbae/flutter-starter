@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../core/constants/breakpoints.dart';
+import '../../core/theme/nav_bar_style.dart';
 import '../../l10n/app_localizations.dart';
 
 class ResponsiveScaffold extends ConsumerStatefulWidget {
@@ -213,7 +214,7 @@ class _AnimatedNavigationBar extends StatelessWidget {
         return SizeTransition(
           sizeFactor: animation,
           axisAlignment: 1,
-          child: NavigationBar(
+          child: _withTopBorder(context, NavigationBar(
             selectedIndex: _getSelectedIndex(currentRoute),
             onDestinationSelected: (index) => _onItemTapped(context, index),
             destinations: [
@@ -238,9 +239,21 @@ class _AnimatedNavigationBar extends StatelessWidget {
                 label: AppLocalizations.of(context).settings,
               ),
             ],
-          ),
+          )),
         );
       },
+    );
+  }
+
+  Widget _withTopBorder(BuildContext context, Widget bar) {
+    final borderColor =
+        Theme.of(context).extension<NavBarStyle>()?.topBorderColor;
+    if (borderColor == null) return bar;
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border(top: BorderSide(color: borderColor)),
+      ),
+      child: bar,
     );
   }
 

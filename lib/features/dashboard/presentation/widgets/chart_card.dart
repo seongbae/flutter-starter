@@ -21,6 +21,7 @@ class ChartCard extends StatelessWidget {
     final maxValue = data.map((e) => e.value).reduce((a, b) => a > b ? a : b);
     
     return Card(
+      margin: EdgeInsets.zero,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -28,9 +29,7 @@ class ChartCard extends StatelessWidget {
           children: [
             Text(
               title,
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 16),
             Expanded(

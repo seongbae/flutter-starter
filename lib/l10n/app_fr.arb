@@ -48,7 +48,7 @@
   "uploadSuccess": "Téléversement réussi !",
   "uploadError": "Échec du téléversement",
   "welcomeTitle": "Bienvenue dans Flutter Starter",
-  "welcomeSubtitle": "Un modèle de démarrage Material 3 avec authentification,\\nthèmes et navigation responsive",
+  "welcomeSubtitle": "Un modèle de démarrage Material 3 avec authentification, thèmes et navigation responsive",
   "uiComponents": "Composants UI",
   "loadingSkeletons": "Squelettes de Chargement",
   "errorHandling": "Gestion des Erreurs",

@@ -154,7 +154,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get welcomeSubtitle =>
-      'A Material 3 starter template with authentication,\\ntheming, and responsive navigation';
+      'A Material 3 starter template with authentication, theming, and responsive navigation';
 
   @override
   String get uiComponents => 'UI Components';

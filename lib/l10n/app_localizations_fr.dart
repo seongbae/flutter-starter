@@ -154,7 +154,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get welcomeSubtitle =>
-      'Un modèle de démarrage Material 3 avec authentification,\\nthèmes et navigation responsive';
+      'Un modèle de démarrage Material 3 avec authentification, thèmes et navigation responsive';
 
   @override
   String get uiComponents => 'Composants UI';

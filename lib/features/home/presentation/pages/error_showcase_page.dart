@@ -3,6 +3,7 @@ import '../../../../shared/widgets/error/error_page.dart';
 import '../../../../shared/widgets/error/error_boundary.dart';
 import '../../../../core/error/error_handler.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/theme/app_spacing.dart';
 
 class ErrorShowcasePage extends StatelessWidget {
   const ErrorShowcasePage({super.key});
@@ -14,7 +15,12 @@ class ErrorShowcasePage extends StatelessWidget {
         title: Text(AppLocalizations.of(context).errorHandling),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.page,
+          AppSpacing.sm,
+          AppSpacing.page,
+          AppSpacing.xxl,
+        ),
         children: [
           _buildSection(
             context,
@@ -96,7 +102,7 @@ class ErrorShowcasePage extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: AppSpacing.xl),
           
           _buildSection(
             context,
@@ -138,7 +144,7 @@ class ErrorShowcasePage extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: AppSpacing.xl),
           
           _buildSection(
             context,
@@ -206,7 +212,7 @@ class ErrorShowcasePage extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: AppSpacing.xl),
           
           _buildSection(
             context,
@@ -271,9 +277,7 @@ class ErrorShowcasePage extends StatelessWidget {
       children: [
         Text(
           title,
-          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         const SizedBox(height: 16),
         content,
@@ -295,7 +299,7 @@ class ErrorShowcasePage extends StatelessWidget {
         ),
         title: Text(title),
         subtitle: Text(description),
-        trailing: const Icon(Icons.arrow_forward_ios),
+        trailing: const Icon(Icons.chevron_right_rounded, size: 20),
         onTap: onTap,
       ),
     );

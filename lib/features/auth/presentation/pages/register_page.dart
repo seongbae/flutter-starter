@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/auth_provider.dart';
 import '../../../../l10n/app_localizations.dart';
+import '../../../../core/theme/app_spacing.dart';
+import '../../../../shared/widgets/labeled_field.dart';
 
 class RegisterPage extends ConsumerStatefulWidget {
   const RegisterPage({super.key});
@@ -28,88 +30,116 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     final authState = ref.watch(authProvider);
-    
+
     ref.listen(authProvider, (previous, next) {
       if (next.error != null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(next.error!)),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(next.error!)));
       }
     });
 
     return Scaffold(
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 400),
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(32.0),
+      appBar: AppBar(leading: BackButton(onPressed: () => context.go('/home'))),
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(AppSpacing.page),
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 400),
               child: Form(
                 key: _formKey,
                 child: Column(
-                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       AppLocalizations.of(context).createAccount,
-                      style: Theme.of(context).textTheme.headlineMedium,
+                      style: Theme.of(context).textTheme.displayMedium,
                     ),
-                    const SizedBox(height: 32),
-                    TextFormField(
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).email,
-                        prefixIcon: Icon(Icons.email_outlined),
+                    const SizedBox(height: AppSpacing.xxl),
+                    LabeledField(
+                      label: AppLocalizations.of(context).email,
+                      child: TextFormField(
+                        controller: _emailController,
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.mail_outline_rounded,
+                            size: 20,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return AppLocalizations.of(
+                              context,
+                            ).pleaseEnterEmail;
+                          }
+                          if (!value.contains('@')) {
+                            return AppLocalizations.of(
+                              context,
+                            ).pleaseEnterValidEmail;
+                          }
+                          return null;
+                        },
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return AppLocalizations.of(context).pleaseEnterEmail;
-                        }
-                        if (!value.contains('@')) {
-                          return AppLocalizations.of(context).pleaseEnterValidEmail;
-                        }
-                        return null;
-                      },
                     ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).password,
-                        prefixIcon: Icon(Icons.lock_outline),
+                    const SizedBox(height: AppSpacing.lg),
+                    LabeledField(
+                      label: AppLocalizations.of(context).password,
+                      child: TextFormField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.lock_outline_rounded,
+                            size: 20,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return AppLocalizations.of(
+                              context,
+                            ).pleaseEnterPassword;
+                          }
+                          if (value.length < 6) {
+                            return AppLocalizations.of(
+                              context,
+                            ).passwordMustBe6Chars;
+                          }
+                          return null;
+                        },
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return AppLocalizations.of(context).pleaseEnterPassword;
-                        }
-                        if (value.length < 6) {
-                          return AppLocalizations.of(context).passwordMustBe6Chars;
-                        }
-                        return null;
-                      },
                     ),
-                    const SizedBox(height: 16),
-                    TextFormField(
-                      controller: _confirmPasswordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        labelText: AppLocalizations.of(context).confirmPassword,
-                        prefixIcon: Icon(Icons.lock_outline),
+                    const SizedBox(height: AppSpacing.lg),
+                    LabeledField(
+                      label: AppLocalizations.of(context).confirmPassword,
+                      child: TextFormField(
+                        controller: _confirmPasswordController,
+                        obscureText: true,
+                        decoration: const InputDecoration(
+                          prefixIcon: Icon(
+                            Icons.lock_outline_rounded,
+                            size: 20,
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return AppLocalizations.of(
+                              context,
+                            ).pleaseConfirmPassword;
+                          }
+                          if (value != _passwordController.text) {
+                            return AppLocalizations.of(
+                              context,
+                            ).passwordsDoNotMatch;
+                          }
+                          return null;
+                        },
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return AppLocalizations.of(context).pleaseConfirmPassword;
-                        }
-                        if (value != _passwordController.text) {
-                          return AppLocalizations.of(context).passwordsDoNotMatch;
-                        }
-                        return null;
-                      },
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: AppSpacing.xl),
                     SizedBox(
                       width: double.infinity,
-                      child: FilledButton(
+                      child: ElevatedButton(
                         onPressed: authState.isLoading ? null : _onRegister,
                         child: authState.isLoading
                             ? const SizedBox(
@@ -122,10 +152,14 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             : Text(AppLocalizations.of(context).createAccount),
                       ),
                     ),
-                    const SizedBox(height: 16),
-                    TextButton(
-                      onPressed: () => context.go('/login'),
-                      child: Text(AppLocalizations.of(context).alreadyHaveAccount),
+                    const SizedBox(height: AppSpacing.lg),
+                    Center(
+                      child: TextButton(
+                        onPressed: () => context.go('/login'),
+                        child: Text(
+                          AppLocalizations.of(context).alreadyHaveAccount,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -139,10 +173,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
   void _onRegister() {
     if (_formKey.currentState!.validate()) {
-      ref.read(authProvider.notifier).register(
-        _emailController.text,
-        _passwordController.text,
-      );
+      ref
+          .read(authProvider.notifier)
+          .register(_emailController.text, _passwordController.text);
     }
   }
 }
