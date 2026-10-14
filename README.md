@@ -1,10 +1,7 @@
 # Flutter Starter App
-
 A modern, production-ready Flutter starter template with best practices, clean architecture, and essential features pre-configured. Perfect for quickly bootstrapping new Flutter projects with a solid foundation.
 
-## 🌐 Live Demo
-
-Check out the live demo: [https://flutter-material3-starter.web.app](https://flutter-material3-starter.web.app)
+Note: This is a fork of the original flutter starter app at https://github.com/momentous-developments/flutter-starter-app.  I've modified the design little bit and plan to make it work seamlessly with a backend admin panel that I plan to release separately as an open source project.  The backend will be built with Laravel and Filament.
 
 ## 🚀 Features
 
@@ -48,7 +45,7 @@ Check out the live demo: [https://flutter-material3-starter.web.app](https://flu
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/momentous-developments/flutter-starter-app.git
+git clone https://github.com/seongbae/flutter-starter-app.git
 cd flutter-starter-app
 ```
 
