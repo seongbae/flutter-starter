@@ -97,7 +97,8 @@ class ApiClient {
   Future<dynamic> put(String path, {Object? data}) =>
       _send(() => _dio.put(path, data: data));
 
-  Future<dynamic> delete(String path) => _send(() => _dio.delete(path));
+  Future<dynamic> delete(String path, {Object? data}) =>
+      _send(() => _dio.delete(path, data: data));
 
   /// Every page of a paginated collection's `data`.
   Future<List<Map<String, dynamic>>> getAll(

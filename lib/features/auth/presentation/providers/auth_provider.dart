@@ -68,6 +68,44 @@ class AuthNotifier extends StateNotifier<AuthState> {
     _setUser(await _repository.updateCurrent(projectId: projectId));
   }
 
+  Future<void> updateProfile({
+    String? name,
+    String? email,
+    String? currentPassword,
+  }) async {
+    _setUser(
+      await _repository.updateProfile(
+        name: name,
+        email: email,
+        currentPassword: currentPassword,
+      ),
+    );
+  }
+
+  Future<void> updatePhoto(String path) async {
+    _setUser(await _repository.updatePhoto(path));
+  }
+
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) => _repository.changePassword(
+    currentPassword: currentPassword,
+    newPassword: newPassword,
+  );
+
+  /// Deletes the account and signs out.
+  Future<void> deleteAccount(String currentPassword) async {
+    await _repository.deleteAccount(currentPassword);
+    await _clearSession();
+  }
+
+  /// Switches to [teamId] on this and every other device. The current
+  /// project is kept only if it belongs to that team.
+  Future<void> selectTeam(int teamId) async {
+    _setUser(await _repository.updateCurrent(teamId: teamId));
+  }
+
   /// Closes the current project, so the board asks for another.
   Future<void> clearProject() async {
     _setUser(await _repository.clearCurrentProject());

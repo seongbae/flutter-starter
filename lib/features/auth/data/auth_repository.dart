@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/api/api_client.dart';
@@ -68,6 +69,49 @@ class AuthRepository {
     );
     return AuthUser.fromJson(dataObject(body));
   }
+
+  /// Changes the fields given. A new email needs [currentPassword].
+  Future<AuthUser> updateProfile({
+    String? name,
+    String? email,
+    String? currentPassword,
+  }) async {
+    final body = await _api.put(
+      '/me',
+      data: {
+        'name': ?name,
+        'email': ?email,
+        'current_password': ?currentPassword,
+      },
+    );
+    return AuthUser.fromJson(dataObject(body));
+  }
+
+  /// Uploads the image at [path] as the profile photo.
+  Future<AuthUser> updatePhoto(String path) async {
+    final body = await _api.post(
+      '/me/photo',
+      data: FormData.fromMap({'photo': await MultipartFile.fromFile(path)}),
+    );
+    return AuthUser.fromJson(dataObject(body));
+  }
+
+  /// Signs out the user's other devices too.
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) => _api.put(
+    '/me/password',
+    data: {
+      'current_password': currentPassword,
+      'password': newPassword,
+      'password_confirmation': newPassword,
+    },
+  );
+
+  /// Deletes the account, along with teams and projects the user owns.
+  Future<void> deleteAccount(String currentPassword) =>
+      _api.delete('/me', data: {'current_password': currentPassword});
 
   /// Revokes the current token on the server.
   Future<void> logout() => _api.post('/auth/logout');

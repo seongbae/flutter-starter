@@ -21,6 +21,9 @@ import '../../features/board/presentation/pages/board_page.dart';
 import '../../features/board/presentation/pages/board_shell.dart';
 import '../../features/board/presentation/board_theme.dart';
 import '../../features/project_settings/presentation/project_settings_page.dart';
+import '../../features/profile/presentation/account_settings_page.dart';
+import '../../features/profile/presentation/edit_profile_page.dart';
+import '../../features/profile/presentation/me_page.dart';
 import '../../shared/widgets/responsive_scaffold.dart';
 
 final onboardingCompletedProvider = StateProvider<bool>((ref) {
@@ -67,6 +70,16 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) =>
             Theme(data: BoardTheme.data, child: const ProjectSettingsPage()),
       ),
+      GoRoute(
+        path: '/me/edit',
+        builder: (context, state) =>
+            Theme(data: BoardTheme.data, child: const EditProfilePage()),
+      ),
+      GoRoute(
+        path: '/me/settings',
+        builder: (context, state) =>
+            Theme(data: BoardTheme.data, child: const AccountSettingsPage()),
+      ),
       ShellRoute(
         builder: (context, state, child) => BoardShell(child: child),
         routes: [
@@ -90,10 +103,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               description: 'How tasks move through the board over time.',
             ),
           ),
-          GoRoute(
-            path: '/me',
-            builder: (context, state) => const SettingsPage(title: 'Me'),
-          ),
+          GoRoute(path: '/me', builder: (context, state) => const MePage()),
         ],
       ),
       ShellRoute(
