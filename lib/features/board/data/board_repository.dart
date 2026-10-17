@@ -190,6 +190,23 @@ class BoardRepository {
         data: {'section_ids': sectionIds.map(int.parse).toList()},
       );
 
+  /// Turns the tasks outside any section into a new section named [name],
+  /// placed before [sectionIds] (the project's existing sections, in
+  /// order). Returns the new section's id. Tasks keep their order.
+  Future<int> sectionFromUnsectioned(
+    int projectId, {
+    required String name,
+    required List<String> taskIds,
+    required List<String> sectionIds,
+  }) async {
+    final id = await createSection(projectId, name);
+    await reorderSections(projectId, ['$id', ...sectionIds]);
+    for (final taskId in taskIds) {
+      await _api.put('/tasks/$taskId', data: {'section_id': id});
+    }
+    return id;
+  }
+
   /// The team's name, or null if it can't be shown (e.g. no longer a member).
   Future<String?> _teamName(int? teamId) async {
     if (teamId == null) return null;

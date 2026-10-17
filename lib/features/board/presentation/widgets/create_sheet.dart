@@ -47,6 +47,30 @@ Future<bool?> showRenameSectionSheet(
   return done == null ? null : true;
 }
 
+/// Asks for a name for a new section holding the [taskCount] tasks that
+/// aren't in one, and creates it with [create]. Completes with the new
+/// section's id, or null if dismissed.
+Future<int?> showSectionFromUnsectionedSheet(
+  BuildContext context, {
+  required int taskCount,
+  required Future<int> Function(String name) create,
+}) {
+  final tasks = taskCount == 1 ? 'Its task moves' : 'Its $taskCount tasks move';
+  return showBoardSheet<int>(
+    context,
+    isScrollControlled: true,
+    builder: (_) => _CreateSheet(
+      title: 'Turn into a section',
+      message:
+          '"No section" holds tasks that aren\'t in a section. Name it to make '
+          'it a real section. $tasks there.',
+      hint: 'e.g. To do',
+      action: 'Create section',
+      create: (name, _) => create(name),
+    ),
+  );
+}
+
 /// Asks for a project name and team, starting with [currentTeamId], and
 /// creates it with [create]. Completes with the new project's id, or null if
 /// dismissed.
@@ -79,9 +103,13 @@ class _CreateSheet extends StatefulWidget {
     this.teams,
     this.currentTeamId,
     this.initialName,
+    this.message,
   });
 
   final String title;
+
+  /// Explains the sheet, under the title.
+  final String? message;
   final String hint;
   final String action;
 
@@ -178,6 +206,13 @@ class _CreateSheetState extends State<_CreateSheet> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(widget.title, style: text.headlineSmall),
+            if (widget.message != null) ...[
+              const SizedBox(height: AppSpacing.xs),
+              Text(
+                widget.message!,
+                style: text.bodyMedium!.copyWith(color: BoardColors.inkSoft),
+              ),
+            ],
             Padding(
               padding: const EdgeInsets.only(
                 top: AppSpacing.lg,

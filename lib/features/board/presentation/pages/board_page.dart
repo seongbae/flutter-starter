@@ -95,6 +95,9 @@ class _BoardPageState extends ConsumerState<BoardPage> {
         column: column,
         canReorder: sections.length > 1,
         canDelete: sections.length > 1,
+        hasUnsectioned:
+            sections.length <
+            ref.read(boardProvider).currentProject.columns.length,
       ),
     );
     if (!mounted || action == null) return;
@@ -121,6 +124,30 @@ class _BoardPageState extends ConsumerState<BoardPage> {
       case _SectionAction.delete:
         await _deleteSection(column);
     }
+  }
+
+  /// Makes "No section" a real section, first in the order, holding the
+  /// tasks that were in it.
+  Future<void> _turnIntoSection(BoardColumn unsectioned) async {
+    final project = ref.read(boardProvider).currentProject;
+    final id = await showSectionFromUnsectionedSheet(
+      context,
+      taskCount: unsectioned.cards.length,
+      create: (name) => ref
+          .read(boardRepositoryProvider)
+          .sectionFromUnsectioned(
+            int.parse(project.id),
+            name: name,
+            taskIds: [for (final c in unsectioned.cards) c.id],
+            sectionIds: [
+              for (final c in project.columns)
+                if (c.id != unsectionedColumnId) c.id,
+            ],
+          ),
+    );
+    if (id == null) return;
+    await _refresh();
+    _showColumn('$id');
   }
 
   Future<void> _deleteSection(BoardColumn column) async {
@@ -281,11 +308,11 @@ class _BoardPageState extends ConsumerState<BoardPage> {
                         selected: i == index,
                         onTap: () => _goToColumn(i),
                         // "No section" isn't a real section to edit.
-                        onLongPress:
-                            project.canAddSections &&
-                                columns[i].id != unsectionedColumnId
-                            ? () => _sectionMenu(columns[i])
-                            : null,
+                        onLongPress: !project.canAddSections
+                            ? null
+                            : columns[i].id == unsectionedColumnId
+                            ? () => _turnIntoSection(columns[i])
+                            : () => _sectionMenu(columns[i]),
                       ),
               ),
             ),
@@ -457,14 +484,27 @@ class _ColumnTab extends StatelessWidget {
     final count = column.limit == null
         ? '${column.cards.length}'
         : '${column.cards.length}/${column.limit}';
-    final color = selected ? Colors.white : BoardColors.ink;
+    // "No section" isn't a real section, so it's outlined, not filled.
+    final virtual = column.id == unsectionedColumnId;
+    final color = virtual
+        ? (selected ? BoardColors.navy : BoardColors.inkSoft)
+        : (selected ? Colors.white : BoardColors.ink);
     final style = Theme.of(
       context,
     ).textTheme.titleSmall!.copyWith(fontSize: 13, color: color);
 
     return Material(
-      color: selected ? BoardColors.navy : BoardColors.chip,
-      shape: const StadiumBorder(),
+      color: virtual
+          ? Colors.transparent
+          : (selected ? BoardColors.navy : BoardColors.chip),
+      shape: virtual
+          ? StadiumBorder(
+              side: BorderSide(
+                color: selected ? BoardColors.navy : BoardColors.line,
+                width: 1.5,
+              ),
+            )
+          : const StadiumBorder(),
       child: InkWell(
         onTap: onTap,
         onLongPress: onLongPress,
@@ -504,11 +544,16 @@ class _SectionMenu extends StatelessWidget {
     required this.column,
     required this.canReorder,
     required this.canDelete,
+    required this.hasUnsectioned,
   });
 
   final BoardColumn column;
   final bool canReorder;
   final bool canDelete;
+
+  /// Whether the board also shows "No section", which a user may take for
+  /// another section.
+  final bool hasUnsectioned;
 
   @override
   Widget build(BuildContext context) {
@@ -555,7 +600,13 @@ class _SectionMenu extends StatelessWidget {
             ),
             subtitle: canDelete
                 ? null
-                : const Text('A project needs at least one section.'),
+                : Text(
+                    hasUnsectioned
+                        ? 'This is the only section, and a project needs one. '
+                              '"No section" holds tasks without a section and '
+                              "doesn't count."
+                        : 'This is the only section, and a project needs one.',
+                  ),
             onTap: () => pick(_SectionAction.delete),
           ),
           const SizedBox(height: AppSpacing.sm),
