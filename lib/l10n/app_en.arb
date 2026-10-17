@@ -1,11 +1,11 @@
 {
   "@@locale": "en",
-  "appTitle": "Flutter Starter",
+  "appTitle": "Traqker",
   "@appTitle": {
     "description": "The title of the application"
   },
   
-  "welcomeMessage": "Welcome to Flutter Starter",
+  "welcomeMessage": "Welcome to Traqker",
   "@welcomeMessage": {
     "description": "Welcome message displayed on home page"
   },
@@ -235,7 +235,7 @@
     "description": "File upload error message"
   },
   
-  "welcomeTitle": "Welcome to Flutter Starter",
+  "welcomeTitle": "Welcome to Traqker",
   "@welcomeTitle": {
     "description": "Welcome title on home page"
   },
@@ -780,7 +780,7 @@
     "description": "About section title"
   },
 
-  "flutterStarterApp": "Flutter Starter App",
+  "flutterStarterApp": "Traqker App",
   "@flutterStarterApp": {
     "description": "App name in about section"
   },
@@ -790,7 +790,7 @@
     "description": "App version"
   },
 
-  "flutterStarter": "Flutter Starter",
+  "flutterStarter": "Traqker",
   "@flutterStarter": {
     "description": "App name"
   },
@@ -1245,7 +1245,7 @@
     "description": "Next button on onboarding"
   },
 
-  "welcomeToFlutterStarter": "Welcome to Flutter Starter",
+  "welcomeToFlutterStarter": "Welcome to Traqker",
   "@welcomeToFlutterStarter": {
     "description": "Onboarding welcome title"
   },

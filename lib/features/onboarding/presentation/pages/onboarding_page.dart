@@ -20,7 +20,7 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
   
   final List<OnboardingStepData> _steps = [
     OnboardingStepData(
-      title: 'Welcome to Flutter Starter',
+      title: 'Welcome to Traqker',
       description: 'A production-ready Flutter template with Material 3 design, '
                   'state management, and essential features to kickstart your next project.',
       image: Icons.rocket_launch,
@@ -177,16 +177,16 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
         ref.read(onboardingCompletedProvider.notifier).state = true;
         
         // Debug log to verify the flow
-        print('Onboarding completed, navigating to /home');
+        print('Onboarding completed, navigating to /board');
         
         // Navigate to home
-        context.go('/home');
+        context.go('/board');
       }
     } catch (e) {
       print('Error completing onboarding: $e');
       // Fallback navigation even if preference saving fails
       if (mounted) {
-        context.go('/home');
+        context.go('/board');
       }
     }
   }

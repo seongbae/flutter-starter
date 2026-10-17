@@ -38,7 +38,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     });
 
     return Scaffold(
-      appBar: AppBar(leading: BackButton(onPressed: () => context.go('/home'))),
+      appBar: AppBar(automaticallyImplyLeading: false),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -136,7 +136,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     if (_formKey.currentState!.validate()) {
       ref
           .read(authProvider.notifier)
-          .login(_emailController.text, _passwordController.text);
+          .login(_emailController.text.trim(), _passwordController.text);
     }
   }
 }

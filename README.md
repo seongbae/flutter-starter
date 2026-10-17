@@ -1,4 +1,5 @@
-# Flutter Starter App
+# Traqker
+
 A modern, production-ready Flutter starter template with best practices, clean architecture, and essential features pre-configured. Perfect for quickly bootstrapping new Flutter projects with a solid foundation.
 
 Note: This is a fork of the original flutter starter app at https://github.com/momentous-developments/flutter-starter-app.  I've modified the design little bit and plan to make it work seamlessly with a backend admin panel that I plan to release separately as an open source project.  The backend will be built with Laravel and Filament.
