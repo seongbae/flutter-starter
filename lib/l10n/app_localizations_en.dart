@@ -9,10 +9,10 @@ class AppLocalizationsEn extends AppLocalizations {
   AppLocalizationsEn([String locale = 'en']) : super(locale);
 
   @override
-  String get appTitle => 'Traqker';
+  String get appTitle => 'Flutter Starter';
 
   @override
-  String get welcomeMessage => 'Welcome to Traqker';
+  String get welcomeMessage => 'Welcome to Flutter Starter';
 
   @override
   String get home => 'Home';
@@ -150,7 +150,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get uploadError => 'Upload failed';
 
   @override
-  String get welcomeTitle => 'Welcome to Traqker';
+  String get welcomeTitle => 'Welcome to Flutter Starter';
 
   @override
   String get welcomeSubtitle =>
@@ -480,13 +480,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get about => 'About';
 
   @override
-  String get flutterStarterApp => 'Traqker App';
+  String get flutterStarterApp => 'Flutter Starter App';
 
   @override
   String get version => 'Version 1.0.0';
 
   @override
-  String get flutterStarter => 'Traqker';
+  String get flutterStarter => 'Flutter Starter';
 
   @override
   String get material3StarterTemplate => 'A Material 3 starter template';
@@ -771,7 +771,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get next => 'Next';
 
   @override
-  String get welcomeToFlutterStarter => 'Welcome to Traqker';
+  String get welcomeToFlutterStarter => 'Welcome to Flutter Starter';
 
   @override
   String get onboardingWelcomeDescription =>

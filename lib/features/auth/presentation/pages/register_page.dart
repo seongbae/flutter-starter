@@ -15,14 +15,12 @@ class RegisterPage extends ConsumerStatefulWidget {
 
 class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
   @override
   void dispose() {
-    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -42,9 +40,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     });
 
     return Scaffold(
-      appBar: AppBar(
-        leading: BackButton(onPressed: () => context.go('/login')),
-      ),
+      appBar: AppBar(leading: BackButton(onPressed: () => context.go('/home'))),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -61,26 +57,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       style: Theme.of(context).textTheme.displayMedium,
                     ),
                     const SizedBox(height: AppSpacing.xxl),
-                    LabeledField(
-                      label: AppLocalizations.of(context).name,
-                      child: TextFormField(
-                        controller: _nameController,
-                        textCapitalization: TextCapitalization.words,
-                        decoration: const InputDecoration(
-                          prefixIcon: Icon(
-                            Icons.person_outline_rounded,
-                            size: 20,
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.trim().isEmpty) {
-                            return AppLocalizations.of(context).pleaseEnterName;
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    const SizedBox(height: AppSpacing.lg),
                     LabeledField(
                       label: AppLocalizations.of(context).email,
                       child: TextFormField(
@@ -124,10 +100,10 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               context,
                             ).pleaseEnterPassword;
                           }
-                          if (value.length < 8) {
+                          if (value.length < 6) {
                             return AppLocalizations.of(
                               context,
-                            ).passwordMustBe8Chars;
+                            ).passwordMustBe6Chars;
                           }
                           return null;
                         },
@@ -199,12 +175,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     if (_formKey.currentState!.validate()) {
       ref
           .read(authProvider.notifier)
-          .register(
-            name: _nameController.text.trim(),
-            email: _emailController.text.trim(),
-            password: _passwordController.text,
-            passwordConfirmation: _confirmPasswordController.text,
-          );
+          .register(_emailController.text, _passwordController.text);
     }
   }
 }

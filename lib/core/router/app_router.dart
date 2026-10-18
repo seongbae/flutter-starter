@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/auth/presentation/providers/auth_provider.dart';
@@ -17,13 +17,6 @@ import '../../features/home/presentation/pages/error_showcase_page.dart';
 import '../../features/home/presentation/pages/file_upload_showcase_page.dart';
 import '../../features/home/presentation/pages/language_showcase_page.dart';
 import '../../features/forms/presentation/pages/forms_example_page.dart';
-import '../../features/board/presentation/pages/board_page.dart';
-import '../../features/board/presentation/pages/board_shell.dart';
-import '../../features/board/presentation/board_theme.dart';
-import '../../features/project_settings/presentation/project_settings_page.dart';
-import '../../features/profile/presentation/account_settings_page.dart';
-import '../../features/profile/presentation/edit_profile_page.dart';
-import '../../features/profile/presentation/me_page.dart';
 import '../../shared/widgets/responsive_scaffold.dart';
 
 final onboardingCompletedProvider = StateProvider<bool>((ref) {
@@ -31,31 +24,50 @@ final onboardingCompletedProvider = StateProvider<bool>((ref) {
   return false;
 });
 
+final _onboardingInitProvider = FutureProvider<bool>((ref) async {
+  final prefs = await SharedPreferences.getInstance();
+  final completed = prefs.getBool('onboarding_completed') ?? false;
+  
+  // Update the state provider with the loaded value
+  Future.microtask(() {
+    ref.read(onboardingCompletedProvider.notifier).state = completed;
+  });
+  
+  return completed;
+});
+
 final routerProvider = Provider<GoRouter>((ref) {
   final authState = ref.watch(authProvider);
-
+  final onboardingCompleted = ref.watch(onboardingCompletedProvider);
+  
+  // Initialize onboarding state from preferences
+  ref.watch(_onboardingInitProvider);
+  
   return GoRouter(
-    initialLocation: '/board',
+    initialLocation: onboardingCompleted ? '/home' : '/onboarding',
     redirect: (context, state) {
       final isAuthenticated = authState.isAuthenticated;
-      final isAuthRoute =
-          state.matchedLocation == '/login' ||
-          state.matchedLocation == '/register';
-
-      // Everything outside the auth pages requires being logged in
-      if (!isAuthenticated && !isAuthRoute) {
-        return '/login';
+      final isAuthRoute = state.matchedLocation == '/login' || 
+                         state.matchedLocation == '/register';
+      final isOnboardingRoute = state.matchedLocation == '/onboarding';
+      
+      // Check onboarding first for new users
+      if (!onboardingCompleted && !isOnboardingRoute) {
+        return '/onboarding';
       }
-
+      
       // Redirect authenticated users away from auth pages
       if (isAuthenticated && isAuthRoute) {
-        return '/board';
+        return '/home';
       }
-
+      
       return null;
     },
     routes: [
-      GoRoute(path: '/login', builder: (context, state) => const LoginPage()),
+      GoRoute(
+        path: '/login',
+        builder: (context, state) => const LoginPage(),
+      ),
       GoRoute(
         path: '/register',
         builder: (context, state) => const RegisterPage(),
@@ -64,52 +76,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/onboarding',
         builder: (context, state) => const OnboardingPage(),
       ),
-      // Full screen over the board, without its bottom nav.
-      GoRoute(
-        path: '/project-settings',
-        builder: (context, state) =>
-            Theme(data: BoardTheme.data, child: const ProjectSettingsPage()),
-      ),
-      GoRoute(
-        path: '/me/edit',
-        builder: (context, state) =>
-            Theme(data: BoardTheme.data, child: const EditProfilePage()),
-      ),
-      GoRoute(
-        path: '/me/settings',
-        builder: (context, state) =>
-            Theme(data: BoardTheme.data, child: const AccountSettingsPage()),
-      ),
-      ShellRoute(
-        builder: (context, state, child) => BoardShell(child: child),
-        routes: [
-          GoRoute(
-            path: '/board',
-            builder: (context, state) => const BoardPage(),
-          ),
-          GoRoute(
-            path: '/standup',
-            builder: (context, state) => const ComingSoonPage(
-              title: 'Standup',
-              icon: Icons.record_voice_over_outlined,
-              description: "What everyone did yesterday and what's next.",
-            ),
-          ),
-          GoRoute(
-            path: '/flow',
-            builder: (context, state) => const ComingSoonPage(
-              title: 'Flow',
-              icon: Icons.air_rounded,
-              description: 'How tasks move through the board over time.',
-            ),
-          ),
-          GoRoute(path: '/me', builder: (context, state) => const MePage()),
-        ],
-      ),
       ShellRoute(
         builder: (context, state, child) => ResponsiveScaffold(child: child),
         routes: [
-          GoRoute(path: '/home', builder: (context, state) => const HomePage()),
+          GoRoute(
+            path: '/home',
+            builder: (context, state) => const HomePage(),
+          ),
           GoRoute(
             path: '/dashboard',
             builder: (context, state) => const DashboardPage(),

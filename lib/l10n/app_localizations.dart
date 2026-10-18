@@ -103,13 +103,13 @@ abstract class AppLocalizations {
   /// The title of the application
   ///
   /// In en, this message translates to:
-  /// **'Traqker'**
+  /// **'Flutter Starter'**
   String get appTitle;
 
   /// Welcome message displayed on home page
   ///
   /// In en, this message translates to:
-  /// **'Welcome to Traqker'**
+  /// **'Welcome to Flutter Starter'**
   String get welcomeMessage;
 
   /// Home navigation label
@@ -385,7 +385,7 @@ abstract class AppLocalizations {
   /// Welcome title on home page
   ///
   /// In en, this message translates to:
-  /// **'Welcome to Traqker'**
+  /// **'Welcome to Flutter Starter'**
   String get welcomeTitle;
 
   /// Welcome subtitle describing the app
@@ -991,7 +991,7 @@ abstract class AppLocalizations {
   /// App name in about section
   ///
   /// In en, this message translates to:
-  /// **'Traqker App'**
+  /// **'Flutter Starter App'**
   String get flutterStarterApp;
 
   /// App version
@@ -1003,7 +1003,7 @@ abstract class AppLocalizations {
   /// App name
   ///
   /// In en, this message translates to:
-  /// **'Traqker'**
+  /// **'Flutter Starter'**
   String get flutterStarter;
 
   /// App description
@@ -1543,7 +1543,7 @@ abstract class AppLocalizations {
   /// Onboarding welcome title
   ///
   /// In en, this message translates to:
-  /// **'Welcome to Traqker'**
+  /// **'Welcome to Flutter Starter'**
   String get welcomeToFlutterStarter;
 
   /// Onboarding welcome description

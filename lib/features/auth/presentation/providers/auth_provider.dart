@@ -1,159 +1,60 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../core/api/api_client.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import '../../data/auth_repository.dart';
-import '../../data/session_storage.dart';
-import '../../domain/auth_user.dart';
 
-class AuthState {
-  const AuthState({
-    this.isAuthenticated = false,
-    this.isLoading = false,
-    this.user,
-    this.error,
-  });
+part 'auth_provider.freezed.dart';
 
-  final bool isAuthenticated;
-  final bool isLoading;
-
-  /// Null while a restored session waits for its first `/me`.
-  final AuthUser? user;
-  final String? error;
+@freezed
+class AuthState with _$AuthState {
+  const factory AuthState({
+    @Default(false) bool isAuthenticated,
+    @Default(false) bool isLoading,
+    String? error,
+  }) = _AuthState;
 }
 
 class AuthNotifier extends StateNotifier<AuthState> {
-  AuthNotifier(this._repository, this._api, this._storage, {String? token})
-    : super(
-        token == null
-            ? const AuthState()
-            : AuthState(isAuthenticated: true, user: _storage.readUser()),
-      ) {
-    _api.token = token;
-    _api.onUnauthorized = _expireSession;
-    if (token != null) refreshUser();
-  }
+  AuthNotifier(this._repository) : super(const AuthState());
 
   final AuthRepository _repository;
-  final ApiClient _api;
-  final SessionStorage _storage;
 
-  Future<void> login(String login, String password) =>
-      _signIn(() => _repository.login(login, password));
-
-  Future<void> register({
-    required String name,
-    required String email,
-    required String password,
-    required String passwordConfirmation,
-  }) => _signIn(
-    () => _repository.register(
-      name: name,
-      email: email,
-      password: password,
-      passwordConfirmation: passwordConfirmation,
-    ),
-  );
-
-  /// Re-fetches the user, e.g. to pick up a team or project chosen on the
-  /// web. Failures keep the cached user; a revoked token signs out.
-  Future<void> refreshUser() async {
-    try {
-      _setUser(await _repository.me());
-    } on ApiException {
-      // 401s are handled by [_expireSession]; anything else is transient.
-    }
-  }
-
-  /// Opens [projectId] (and its team) on this and every other device.
-  Future<void> selectProject(int projectId) async {
-    _setUser(await _repository.updateCurrent(projectId: projectId));
-  }
-
-  Future<void> updateProfile({
-    String? name,
-    String? email,
-    String? currentPassword,
-  }) async {
-    _setUser(
-      await _repository.updateProfile(
-        name: name,
-        email: email,
-        currentPassword: currentPassword,
-      ),
-    );
-  }
-
-  Future<void> updatePhoto(String path) async {
-    _setUser(await _repository.updatePhoto(path));
-  }
-
-  Future<void> changePassword({
-    required String currentPassword,
-    required String newPassword,
-  }) => _repository.changePassword(
-    currentPassword: currentPassword,
-    newPassword: newPassword,
-  );
-
-  /// Deletes the account and signs out.
-  Future<void> deleteAccount(String currentPassword) async {
-    await _repository.deleteAccount(currentPassword);
-    await _clearSession();
-  }
-
-  /// Switches to [teamId] on this and every other device. The current
-  /// project is kept only if it belongs to that team.
-  Future<void> selectTeam(int teamId) async {
-    _setUser(await _repository.updateCurrent(teamId: teamId));
-  }
-
-  /// Closes the current project, so the board asks for another.
-  Future<void> clearProject() async {
-    _setUser(await _repository.clearCurrentProject());
-  }
-
-  Future<void> logout() async {
-    try {
-      await _repository.logout();
-    } on ApiException {
-      // Already revoked or offline; forget it locally either way.
-    }
-    await _clearSession();
-  }
-
-  Future<void> _signIn(Future<AuthSession> Function() request) async {
+  Future<void> login(String email, String password) async {
     state = const AuthState(isLoading: true);
+    
     try {
-      final session = await request();
-      _api.token = session.token;
-      await _storage.save(session.token, session.user);
-      state = AuthState(isAuthenticated: true, user: session.user);
+      final success = await _repository.login(email, password);
+      if (success) {
+        state = const AuthState(isAuthenticated: true);
+      } else {
+        state = const AuthState(error: 'Invalid credentials');
+      }
     } catch (e) {
-      state = AuthState(error: ApiException.from(e).message);
+      state = AuthState(error: e.toString());
     }
   }
-
-  void _setUser(AuthUser user) {
-    if (!state.isAuthenticated) return;
-    state = AuthState(isAuthenticated: true, user: user);
-    _storage.saveUser(user);
+  
+  Future<void> register(String email, String password) async {
+    state = const AuthState(isLoading: true);
+    
+    try {
+      final success = await _repository.register(email, password);
+      if (success) {
+        state = const AuthState(isAuthenticated: true);
+      } else {
+        state = const AuthState(error: 'Registration failed');
+      }
+    } catch (e) {
+      state = AuthState(error: e.toString());
+    }
   }
-
-  void _expireSession() {
-    if (state.isAuthenticated) _clearSession();
-  }
-
-  Future<void> _clearSession() async {
-    _api.token = null;
-    state = const AuthState();
-    await _storage.clear();
+  
+  Future<void> logout() async {
+    await _repository.logout();
+    state = const AuthState(isAuthenticated: false);
   }
 }
 
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  return AuthNotifier(
-    ref.watch(authRepositoryProvider),
-    ref.watch(apiClientProvider),
-    ref.watch(sessionStorageProvider),
-    token: ref.watch(initialAuthTokenProvider),
-  );
+  final repository = ref.watch(authRepositoryProvider);
+  return AuthNotifier(repository);
 });

@@ -9,10 +9,7 @@ import '../../../../core/theme/app_spacing.dart';
 import '../../../../l10n/app_localizations.dart';
 
 class SettingsPage extends ConsumerWidget {
-  const SettingsPage({super.key, this.title});
-
-  /// Defaults to "Settings".
-  final String? title;
+  const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -47,7 +44,7 @@ class SettingsPage extends ConsumerWidget {
       ),
       children: [
         PageHeader(
-          title: title ?? AppLocalizations.of(context).settings,
+          title: AppLocalizations.of(context).settings,
           actions: [
             if (isAuthenticated)
               IconButton(

@@ -1,4 +1,4 @@
-name: traqker
+name: flutter_starter
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -64,7 +64,6 @@ dependencies:
   flutter_dotenv: ^5.1.0
   freezed_annotation: ^2.4.0
   intl: ^0.20.2
-  package_info_plus: ^9.0.1
 
 dev_dependencies:
   flutter_test:
@@ -74,7 +73,6 @@ dev_dependencies:
   freezed: ^2.5.0
   json_serializable: ^6.8.0
   riverpod_generator: ^2.5.1
-  flutter_launcher_icons: ^0.14.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -120,22 +118,3 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
-
-flutter_launcher_icons:
-  image_path: "assets/icon/app_icon.png"
-  android: true
-  adaptive_icon_background: "#FFFFFF"
-  adaptive_icon_foreground: "assets/icon/app_icon_foreground.png"
-  ios: true
-  remove_alpha_ios: true
-  web:
-    generate: true
-    image_path: "assets/icon/app_icon.png"
-    background_color: "#FFFFFF"
-    theme_color: "#253060"
-  windows:
-    generate: true
-    image_path: "assets/icon/app_icon.png"
-  macos:
-    generate: true
-    image_path: "assets/icon/app_icon.png"
